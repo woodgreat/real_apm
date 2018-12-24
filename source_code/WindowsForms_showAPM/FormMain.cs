@@ -35,8 +35,6 @@ namespace WindowsForms_showAPM
             this.Visible = true;
             if ( this.WindowState == FormWindowState.Minimized )
             {
-                this.labelTextApm.Text = totalAPM.ToString();
-
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
             } else
@@ -126,9 +124,13 @@ namespace WindowsForms_showAPM
 
             int oneBit = totalAPM % 10;
             int handredTenBit = ( totalAPM - oneBit ) / 10;
+            if(handredTenBit > 99)
+            {
+                handredTenBit = 99;     //adjust shown chars
+            }
             string shownAPM = handredTenBit.ToString();
             SetTaskIconDynamic(shownAPM);
-            System.Console.WriteLine("totalAPM: "+ totalAPM);     //del
+            //System.Console.WriteLine("totalAPM: "+ totalAPM);     //del
 
             //SetTaskIconDynamic(Convert.ToString(this.tenCounter));      //only test
 
@@ -137,7 +139,7 @@ namespace WindowsForms_showAPM
 
         public void SetTaskIconDynamic(string number)
         {
-            System.Console.WriteLine("SetTaskIconDynamic");     //del
+            //System.Console.WriteLine("SetTaskIconDynamic");     //del
             //动态绘制图标样式
             Size size = this.Icon.Size;
             Bitmap cursorBitmap = new Bitmap(size.Width,size.Height);
@@ -164,8 +166,8 @@ namespace WindowsForms_showAPM
                 LineAlignment = StringAlignment.Center,
                 Alignment = StringAlignment.Center
             });
-            System.Console.WriteLine("rect.Width :"+ rect.Width);     //del
-            System.Console.WriteLine("rect.Height :"+ rect.Height);     //del
+            //System.Console.WriteLine("rect.Width :"+ rect.Width);     //del
+            //System.Console.WriteLine("rect.Height :"+ rect.Height);     //del
 
             //生成Icon
             Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
@@ -176,7 +178,6 @@ namespace WindowsForms_showAPM
             this.notifyIconTaskbar.Icon = cursor;
 
             this.notifyIconTaskbar.Text = "Real APM : "+totalAPM;
-            //this.labelTextApm.Text = "ok";!!!
 
             this.bgWorker.RunWorkerAsync();
 
@@ -245,7 +246,7 @@ namespace WindowsForms_showAPM
         private void calculateSecondAPM()
         {
             int secondNow =DateTime.Now.Second;
-            System.Console.WriteLine("secondNow: "+ secondNow);     //del
+            //System.Console.WriteLine("secondNow: "+ secondNow);     //del
             //DateTime.Now.Second.ToString();       //获取秒数 
 
             apmSeconds[secondNow] = thisSecondsCounter;
@@ -300,7 +301,7 @@ namespace WindowsForms_showAPM
             RunWorkerCompletedEventArgs e)
         {
             this.labelTextApm.Text = totalAPM.ToString();                      
-            System.Console.WriteLine("bgWorker refreshed");
+            //System.Console.WriteLine("bgWorker refreshed");
         }
     }
 }
