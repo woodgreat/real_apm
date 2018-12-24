@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+/*
+ALL SOURCE CODES OF THIS PROJECT IS UNDER LGPL 3.0
+     */
 namespace WindowsForms_showAPM
 {
     public partial class FormMain : Form
@@ -35,9 +37,11 @@ namespace WindowsForms_showAPM
             {
                 this.labelTextApm.Text = totalAPM.ToString();
 
+                this.Show();
                 this.WindowState = FormWindowState.Normal;
             } else
                 {
+                    this.Hide();
                     this.WindowState = FormWindowState.Minimized;
                 }
 
@@ -64,7 +68,10 @@ namespace WindowsForms_showAPM
             //form
             CheckForIllegalCrossThreadCalls = false;//disable report
 
+            
             this.WindowState = FormWindowState.Minimized;
+            this.Hide();
+
             this.ShowInTaskbar = false;
             this.Text ="Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
@@ -277,6 +284,7 @@ namespace WindowsForms_showAPM
                 e.Cancel = true;
             }
 
+            this.Hide();
             this.WindowState = FormWindowState.Minimized;
         }
 
