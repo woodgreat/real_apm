@@ -157,10 +157,10 @@ namespace WindowsForms_showAPM
             //    Alignment = StringAlignment.Center
             //});
 
-            Font myFont = new Font("sans serif", rect.Width /2  ,FontStyle.Regular);
+            Font myFont = new Font("Tahoma", rect.Width /2  ,FontStyle.Regular);
             Brush bush = new SolidBrush(Color.Cyan);//填充的颜色
             //graphics.DrawString("99",myFont,bush,100,100);
-
+            graphics.FillRectangle(new SolidBrush(Color.Indigo),0,0,size.Width,size.Height);
             graphics.DrawString(number,myFont,bush,new Rectangle(2,2,rect.Width ,rect.Height),new StringFormat()
             {
                 LineAlignment = StringAlignment.Center,
