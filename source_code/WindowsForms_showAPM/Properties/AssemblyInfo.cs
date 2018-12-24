@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("WindowsForms_showAPM")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Real APM")]
+[assembly: AssemblyDescription("mr_wood@126.com")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WindowsForms_showAPM")]
+[assembly: AssemblyCompany("1code.net")]
+[assembly: AssemblyProduct("Real APM")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
