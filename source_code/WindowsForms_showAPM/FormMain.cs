@@ -20,6 +20,8 @@ namespace WindowsForms_showAPM
         private MouseHook m_hook;
         private int[] apmSeconds;
 
+        private BackgroundWorker bgWorker;
+
         public FormMain()
         {
             InitializeComponent();
@@ -31,6 +33,8 @@ namespace WindowsForms_showAPM
             this.Visible = true;
             if ( this.WindowState == FormWindowState.Minimized )
             {
+                this.labelTextApm.Text = totalAPM.ToString();
+
                 this.WindowState = FormWindowState.Normal;
             } else
                 {
@@ -55,11 +59,20 @@ namespace WindowsForms_showAPM
             //////////////////
             ////initial
             //////////////////
-            
+
             ////////////
             //form
+            CheckForIllegalCrossThreadCalls = false;//disable report
+
             this.WindowState = FormWindowState.Minimized;
             this.ShowInTaskbar = false;
+            this.Text ="Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+            this.bgWorker = new System.ComponentModel.BackgroundWorker();
+
+            this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_DoWork);
+            this.bgWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);
+
 
             ///////////
             //key hook
@@ -156,6 +169,9 @@ namespace WindowsForms_showAPM
             this.notifyIconTaskbar.Icon = cursor;
 
             this.notifyIconTaskbar.Text = "Real APM : "+totalAPM;
+            //this.labelTextApm.Text = "ok";!!!
+
+            this.bgWorker.RunWorkerAsync();
 
         }
 
@@ -241,6 +257,42 @@ namespace WindowsForms_showAPM
         {
             k_hook.Stop();
             m_hook.UnHook();
+        }
+
+
+        private void buttonExit_Click(object sender,EventArgs e)
+        {
+            k_hook.Stop();
+            m_hook.UnHook();
+
+            this.Dispose(false);
+            System.Environment.Exit(0);
+        }
+
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if ( this.Visible )
+            {
+                e.Cancel = true;
+            }
+
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+
+        void bgWorker_DoWork(object sender,DoWorkEventArgs e)
+        {
+            //do-nothing
+        }
+
+
+        private void bgWorker_RunWorkerCompleted(
+            object sender,
+            RunWorkerCompletedEventArgs e)
+        {
+            this.labelTextApm.Text = totalAPM.ToString();                      
+            System.Console.WriteLine("bgWorker refreshed");
         }
     }
 }
