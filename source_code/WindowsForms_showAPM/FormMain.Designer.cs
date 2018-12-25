@@ -92,6 +92,7 @@
             this.Text = "Real APM";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.DoubleClick += new System.EventHandler(this.FormMain_DoubleClick);
             this.ResumeLayout(false);
             this.PerformLayout();
 

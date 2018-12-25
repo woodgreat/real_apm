@@ -22,8 +22,6 @@ namespace WindowsForms_showAPM
         private MouseHook m_hook;
         private int[] apmSeconds;
 
-        private BackgroundWorker bgWorker;
-
         public FormMain()
         {
             InitializeComponent();
@@ -72,11 +70,6 @@ namespace WindowsForms_showAPM
 
             this.ShowInTaskbar = false;
             this.Text ="Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-            this.bgWorker = new System.ComponentModel.BackgroundWorker();
-
-            this.bgWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_DoWork);
-            this.bgWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_RunWorkerCompleted);
 
 
             ///////////
@@ -179,8 +172,7 @@ namespace WindowsForms_showAPM
 
             this.notifyIconTaskbar.Text = "Real APM : "+totalAPM;
 
-            this.bgWorker.RunWorkerAsync();
-
+            this.labelTextApm.Text = totalAPM.ToString();
         }
 
 
@@ -289,19 +281,9 @@ namespace WindowsForms_showAPM
             this.WindowState = FormWindowState.Minimized;
         }
 
-
-        void bgWorker_DoWork(object sender,DoWorkEventArgs e)
+        private void FormMain_DoubleClick(object sender,EventArgs e)
         {
-            //do-nothing
-        }
-
-
-        private void bgWorker_RunWorkerCompleted(
-            object sender,
-            RunWorkerCompletedEventArgs e)
-        {
-            this.labelTextApm.Text = totalAPM.ToString();                      
-            //System.Console.WriteLine("bgWorker refreshed");
+            MessageBox.Show("责任作者：mr_wood@126.com");
         }
     }
 }
