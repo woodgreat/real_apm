@@ -166,17 +166,24 @@ namespace WindowsForms_showAPM
             //System.Console.WriteLine("rect.Height :"+ rect.Height);     //del
 
             //生成Icon
-            Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
-            graphics.Dispose();
-            cursorBitmap.Dispose();
+            try
+            {
+                Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
+                graphics.Dispose();
+                cursorBitmap.Dispose();
 
-            //更新任务栏图标样式
-            this.notifyIconTaskbar.Icon = cursor;
+                //更新任务栏图标样式
+                this.notifyIconTaskbar.Icon = cursor;
 
-            this.notifyIconTaskbar.Text = "Real APM : "+totalAPM;
+                this.notifyIconTaskbar.Text = "Real APM : " + totalAPM;
 
-            m_SyncContext.Post(safePost_setAPMText,totalAPM);
-            //this.labelTextApm.Text = totalAPM.ToString();
+                m_SyncContext.Post(safePost_setAPMText,totalAPM);
+                //this.labelTextApm.Text = totalAPM.ToString();
+            } catch( Exception e )
+            {
+                //no-nothing
+            }
+            
         }
 
 
