@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 /*
@@ -21,6 +22,8 @@ namespace WindowsForms_showAPM
         private KeyboardHook k_hook;
         private MouseHook m_hook;
         private int[] apmSeconds;
+
+        SynchronizationContext m_SyncContext = null;
 
         public FormMain()
         {
@@ -62,9 +65,9 @@ namespace WindowsForms_showAPM
 
             ////////////
             //form
-            CheckForIllegalCrossThreadCalls = false;//disable report
+            //CheckForIllegalCrossThreadCalls = false;//disable report
+            m_SyncContext = SynchronizationContext.Current;
 
-            
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
 
@@ -172,6 +175,13 @@ namespace WindowsForms_showAPM
 
             this.notifyIconTaskbar.Text = "Real APM : "+totalAPM;
 
+            m_SyncContext.Post(safePost_setAPMText,totalAPM);
+            //this.labelTextApm.Text = totalAPM.ToString();
+        }
+
+
+        private void safePost_setAPMText(object totalAPM)
+        {
             this.labelTextApm.Text = totalAPM.ToString();
         }
 
