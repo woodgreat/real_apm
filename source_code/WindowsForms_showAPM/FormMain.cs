@@ -169,9 +169,7 @@ namespace WindowsForms_showAPM
             try
             {
                 Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
-                graphics.Dispose();
-                cursorBitmap.Dispose();
-
+                
                 //更新任务栏图标样式
                 this.notifyIconTaskbar.Icon = cursor;
 
@@ -179,6 +177,12 @@ namespace WindowsForms_showAPM
 
                 m_SyncContext.Post(safePost_setAPMText,totalAPM);
                 //this.labelTextApm.Text = totalAPM.ToString();
+
+                graphics.Dispose();
+                cursorBitmap.Dispose();
+                cursor.Dispose();
+                myFont.Dispose();
+                bush.Dispose();              
             } catch( Exception e )
             {
                 //no-nothing
@@ -209,8 +213,9 @@ namespace WindowsForms_showAPM
             //MessageBox.Show(e.X + "-" + e.Y);
             //System.Console.WriteLine(e.X + "-" + e.Y);     //del
 
-            if( (e.Button == MouseButtons.Left ) ||
-                ( e.Button == MouseButtons.Right )
+            if( ( e.Button == MouseButtons.Left )   ||
+                ( e.Button == MouseButtons.Right )  ||
+                ( e.Button == MouseButtons.Middle )
               )
             {
                 //addCounter_one();     //only for test

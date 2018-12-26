@@ -31,6 +31,7 @@ namespace WindowsForms_showAPM
         private int hHook;
         private const int WM_LBUTTONDOWN = 0x201;
         private const int WM_RBUTTONDOWN = 0x204;
+        private const int WM_MBUTTONDOWN = 0x207;
         public const int WH_MOUSE_LL = 14;
         public Win32Api.HookProc hProc;
         public MouseHook()
@@ -68,6 +69,11 @@ namespace WindowsForms_showAPM
 
                         case WM_RBUTTONDOWN:
                         button = MouseButtons.Right;
+                        clickCount = 1;
+                        break;
+
+                        case WM_MBUTTONDOWN:
+                        button = MouseButtons.Middle;
                         clickCount = 1;
                         break;
                     }
