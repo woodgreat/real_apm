@@ -17,13 +17,15 @@ namespace WindowsForms_showAPM
     {
         private int totalAPM = 0;
         private int thisSecondsCounter = 0;
-        private int oneCounter =0;
+        private int oneCounter = 0;
         private int tenCounter = 0;
         private KeyboardHook k_hook;
         private MouseHook m_hook;
         private int[] apmSeconds;
 
         SynchronizationContext m_SyncContext = null;
+
+        private static object actionLock = new object();
 
         public FormMain()
         {
@@ -39,12 +41,12 @@ namespace WindowsForms_showAPM
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
             } else
-                {
-                    this.Hide();
-                    this.WindowState = FormWindowState.Minimized;
-                }
+            {
+                this.Hide();
+                this.WindowState = FormWindowState.Minimized;
+            }
 
-            
+
         }
 
 
@@ -55,7 +57,7 @@ namespace WindowsForms_showAPM
         //        this.Hide();
         //    }
         //}
-        
+
 
         private void FormMain_Load(object sender,EventArgs e)
         {
@@ -72,7 +74,7 @@ namespace WindowsForms_showAPM
             this.Hide();
 
             this.ShowInTaskbar = false;
-            this.Text ="Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text = "Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
 
             ///////////
@@ -92,7 +94,7 @@ namespace WindowsForms_showAPM
             /////////////
             //seconds work array
             apmSeconds = new int[60];
-            for(int i=0;i<60;i++ )
+            for ( int i = 0; i < 60; i++ )
             {
                 apmSeconds[i] = 0;
             }
@@ -120,7 +122,7 @@ namespace WindowsForms_showAPM
 
             int oneBit = totalAPM % 10;
             int handredTenBit = ( totalAPM - oneBit ) / 10;
-            if(handredTenBit > 99)
+            if ( handredTenBit > 99 )
             {
                 handredTenBit = 99;     //adjust shown chars
             }
@@ -153,11 +155,11 @@ namespace WindowsForms_showAPM
             //    Alignment = StringAlignment.Center
             //});
 
-            Font myFont = new Font("Tahoma", rect.Width /2  ,FontStyle.Regular);
+            Font myFont = new Font("Tahoma",rect.Width / 2,FontStyle.Regular);
             Brush bush = new SolidBrush(Color.Cyan);//填充的颜色
             //graphics.DrawString("99",myFont,bush,100,100);
             graphics.FillRectangle(new SolidBrush(Color.Indigo),0,0,size.Width,size.Height);
-            graphics.DrawString(number,myFont,bush,new Rectangle(2,2,rect.Width ,rect.Height),new StringFormat()
+            graphics.DrawString(number,myFont,bush,new Rectangle(2,2,rect.Width,rect.Height),new StringFormat()
             {
                 LineAlignment = StringAlignment.Center,
                 Alignment = StringAlignment.Center
@@ -168,23 +170,28 @@ namespace WindowsForms_showAPM
             //生成Icon
             try
             {
-                Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
                 
-                //更新任务栏图标样式
-                this.notifyIconTaskbar.Icon = cursor;
+                lock( actionLock )
+                {
+                    Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
+                
+                    //更新任务栏图标样式
+                    this.notifyIconTaskbar.Icon = cursor;
 
-                this.notifyIconTaskbar.Text = "Real APM : " + totalAPM;
+                    this.notifyIconTaskbar.Text = "Real APM : " + totalAPM;
 
-                m_SyncContext.Post(safePost_setAPMText,totalAPM);
-                //this.labelTextApm.Text = totalAPM.ToString();
+                    m_SyncContext.Post(safePost_setAPMText,totalAPM);
+                    //this.labelTextApm.Text = totalAPM.ToString();
 
-                graphics.Dispose();
-                cursorBitmap.Dispose();
-                cursor.Dispose();
-                myFont.Dispose();
-                bush.Dispose();              
+                    graphics.Dispose();
+                    cursorBitmap.Dispose();
+                    cursor.Dispose();
+                    myFont.Dispose();
+                    bush.Dispose();   
+                }           
             } catch( Exception e )
             {
+                //System.Console.WriteLine("e :" + e.ToString());     //del
                 //no-nothing
             }
             
