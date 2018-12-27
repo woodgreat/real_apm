@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -134,46 +135,48 @@ namespace WindowsForms_showAPM
 
         }
 
+        [DllImport("user32.dll")]
+        public static extern bool DestroyIcon(IntPtr handle);   //Icon对象后调用此方法释放Handler
 
         public void SetTaskIconDynamic(string number)
         {
-            //System.Console.WriteLine("SetTaskIconDynamic");     //del
-            //动态绘制图标样式
-            Size size = this.Icon.Size;
-            Bitmap cursorBitmap = new Bitmap(size.Width,size.Height);
-            Graphics graphics = Graphics.FromImage(cursorBitmap);
-            graphics.Clear(Color.FromArgb(0,0,0,0));
-            graphics.ResetClip();
-            Rectangle rect = new Rectangle(0,0,size.Width,size.Height);
-
-            //Gdi+自定义绘制图标
-            //graphics.DrawImage(this.Icon.ToBitmap(),rect);
-            //graphics.FillEllipse(new SolidBrush(Color.FromArgb(244,107,10)),new Rectangle(rect.Width / 2 - 2,rect.Height / 2 - 2,rect.Width / 2,rect.Height / 2));
-            //graphics.DrawString(number,this.Font,Brushes.White,new Rectangle(rect.Width / 2 - 2,rect.Height / 2 - 2,rect.Width / 2,rect.Height / 2),new StringFormat()
-            //{
-            //    LineAlignment = StringAlignment.Center,
-            //    Alignment = StringAlignment.Center
-            //});
-
-            Font myFont = new Font("Tahoma",rect.Width / 2,FontStyle.Regular);
-            Brush bush = new SolidBrush(Color.Cyan);//填充的颜色
-            //graphics.DrawString("99",myFont,bush,100,100);
-            graphics.FillRectangle(new SolidBrush(Color.Indigo),0,0,size.Width,size.Height);
-            graphics.DrawString(number,myFont,bush,new Rectangle(2,2,rect.Width,rect.Height),new StringFormat()
-            {
-                LineAlignment = StringAlignment.Center,
-                Alignment = StringAlignment.Center
-            });
-            //System.Console.WriteLine("rect.Width :"+ rect.Width);     //del
-            //System.Console.WriteLine("rect.Height :"+ rect.Height);     //del
-
-            //生成Icon
             try
             {
-                
-                lock( actionLock )
+                lock ( actionLock )
                 {
-                    Icon cursor = Icon.FromHandle(cursorBitmap.GetHicon());
+                    //System.Console.WriteLine("SetTaskIconDynamic");     //del
+                    //动态绘制图标样式
+                    Size size = this.Icon.Size;
+                    Bitmap cursorBitmap = new Bitmap(size.Width,size.Height);
+                    Graphics graphics = Graphics.FromImage(cursorBitmap);
+                    graphics.Clear(Color.FromArgb(0,0,0,0));
+                    graphics.ResetClip();
+                    Rectangle rect = new Rectangle(0,0,size.Width,size.Height);
+
+                    //Gdi+自定义绘制图标
+                    //graphics.DrawImage(this.Icon.ToBitmap(),rect);
+                    //graphics.FillEllipse(new SolidBrush(Color.FromArgb(244,107,10)),new Rectangle(rect.Width / 2 - 2,rect.Height / 2 - 2,rect.Width / 2,rect.Height / 2));
+                    //graphics.DrawString(number,this.Font,Brushes.White,new Rectangle(rect.Width / 2 - 2,rect.Height / 2 - 2,rect.Width / 2,rect.Height / 2),new StringFormat()
+                    //{
+                    //    LineAlignment = StringAlignment.Center,
+                    //    Alignment = StringAlignment.Center
+                    //});
+
+                    Font myFont = new Font("Tahoma",rect.Width / 2,FontStyle.Regular);
+                    Brush bush = new SolidBrush(Color.Cyan);//填充的颜色
+                    //graphics.DrawString("99",myFont,bush,100,100);
+                    graphics.FillRectangle(new SolidBrush(Color.Indigo),0,0,size.Width,size.Height);
+                    graphics.DrawString(number,myFont,bush,new Rectangle(2,2,rect.Width,rect.Height),new StringFormat()
+                    {
+                        LineAlignment = StringAlignment.Center,
+                        Alignment = StringAlignment.Center
+                    });
+                    //System.Console.WriteLine("rect.Width :"+ rect.Width);     //del
+                    //System.Console.WriteLine("rect.Height :"+ rect.Height);     //del
+
+                    //生成Icon
+                    IntPtr iconHandle = cursorBitmap.GetHicon();
+                    Icon cursor = Icon.FromHandle(iconHandle);
                 
                     //更新任务栏图标样式
                     this.notifyIconTaskbar.Icon = cursor;
@@ -183,6 +186,9 @@ namespace WindowsForms_showAPM
                     m_SyncContext.Post(safePost_setAPMText,totalAPM);
                     //this.labelTextApm.Text = totalAPM.ToString();
 
+                    
+                    DestroyIcon(iconHandle);    //free icon resource , 
+                      // anti System.Runtime.InteropServices.ExternalException (0x80004005): GDI+ 中发生一般性错误。
                     graphics.Dispose();
                     cursorBitmap.Dispose();
                     cursor.Dispose();
@@ -191,7 +197,7 @@ namespace WindowsForms_showAPM
                 }           
             } catch( Exception e )
             {
-                //System.Console.WriteLine("e :" + e.ToString());     //del
+                System.Console.WriteLine("e :" + e.ToString());     //del
                 //no-nothing
             }
             
