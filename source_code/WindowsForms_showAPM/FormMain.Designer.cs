@@ -53,7 +53,7 @@
       this.labelTipApm.AutoSize = true;
       this.labelTipApm.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTipApm.ForeColor = System.Drawing.Color.DarkMagenta;
-      this.labelTipApm.Location = new System.Drawing.Point(96, 47);
+      this.labelTipApm.Location = new System.Drawing.Point(96, 45);
       this.labelTipApm.Name = "labelTipApm";
       this.labelTipApm.Size = new System.Drawing.Size(174, 20);
       this.labelTipApm.TabIndex = 0;
@@ -64,7 +64,7 @@
       this.labelTextApm.AutoSize = true;
       this.labelTextApm.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTextApm.ForeColor = System.Drawing.Color.RoyalBlue;
-      this.labelTextApm.Location = new System.Drawing.Point(270, 39);
+      this.labelTextApm.Location = new System.Drawing.Point(270, 37);
       this.labelTextApm.Name = "labelTextApm";
       this.labelTextApm.Size = new System.Drawing.Size(32, 33);
       this.labelTextApm.TabIndex = 1;

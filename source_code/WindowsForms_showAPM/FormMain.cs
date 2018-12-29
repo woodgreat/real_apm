@@ -48,7 +48,9 @@ namespace WindowsForms_showAPM
 
     private Series series1MinApmTotal = new Series("total");
     private Series series1MinApmMouseTotal = new Series("mouse");
-
+      
+    private static int DATA_CHART_SHOWN_SECONDS =300;    //DEFINE SECONDS CHART DATA
+    
     public FormMain()
     {
       InitializeComponent();
@@ -103,10 +105,10 @@ namespace WindowsForms_showAPM
       /////////////////
       //apm chart
       initialChart();
-      apmChartData = new int[60];
-      apmChartKeyData = new int[60];
-      apmChartMouseData = new int[60];
-      for ( int i = 0; i < 60; i++ )
+      apmChartData = new int[DATA_CHART_SHOWN_SECONDS];
+      apmChartKeyData = new int[DATA_CHART_SHOWN_SECONDS];
+      apmChartMouseData = new int[DATA_CHART_SHOWN_SECONDS];
+      for ( int i = 0; i < DATA_CHART_SHOWN_SECONDS; i++ )
       {
         apmChartData[i] = 0;
         apmChartKeyData[i] = 0;
@@ -180,7 +182,7 @@ namespace WindowsForms_showAPM
       series1MinApmTotal.Points.Clear();    //clear the total data
       series1MinApmMouseTotal.Points.Clear();    //clear the mouse data
 
-      for ( int i = 0; i < 60; i++ )
+      for ( int i = 0; i < DATA_CHART_SHOWN_SECONDS; i++ )
       {
         series1MinApmTotal.Points.Add(apmChartData[i]);
         series1MinApmMouseTotal.Points.Add(apmChartMouseData[i]);
@@ -385,22 +387,25 @@ namespace WindowsForms_showAPM
         totalMouseAPM += apmSecondsMouse[i];
       }
 
+
+      //renew chart data
+      for ( int i = DATA_CHART_SHOWN_SECONDS - 2; i >= 0; i-- )
+      {//move data one slot
+        apmChartData[i+1] = apmChartData[i];
+        apmChartKeyData[i+1] = apmChartKeyData[i];
+        apmChartMouseData[i+1] = apmChartMouseData[i];
+      }
+      apmChartData[0] = thisSecondsCounter;    //keep last apm valuse
+      apmChartKeyData[0] = thisSecondsKeyCounter;
+      apmChartMouseData[0] = thisSecondsMouseCounter;
+
+      //apmChartData[59] = totalAPM;    //keep last apm valuse
+      //apmChartKeyData[59] = totalKeyAPM;
+      //apmChartMouseData[59] = totalMouseAPM;
+
       thisSecondsCounter = 0;         //reset total seconds counter
       thisSecondsMouseCounter = 0;    //reset mouse seconds counter
       thisSecondsKeyCounter = 0;      //reset key seconds counter
-
-
-      //renew chart data
-      for ( int i = 1; i < 60; i++ )
-      {//move data one slot
-        apmChartData[i - 1] = apmChartData[i];
-        apmChartKeyData[i - 1] = apmChartKeyData[i];
-        apmChartMouseData[i - 1] = apmChartMouseData[i];
-      }
-      apmChartData[59] = totalAPM;    //keep last apm valuse
-      apmChartKeyData[59] = totalKeyAPM;
-      apmChartMouseData[59] = totalMouseAPM;
-
     }
 
 
@@ -442,6 +447,8 @@ namespace WindowsForms_showAPM
     private void initialChart()
     {
       chart1MinApm.Series.Clear();//清除默认的图例
+      //chart1MinApm.ChartAreas[0].AxisX.LabelStyle.Angle = 90;
+      //chart1MinApm.ChartAreas[0].AxisX.IsMarginVisible = false;   //disable margin
 
       series1MinApmTotal.ChartType = SeriesChartType.Area;
       series1MinApmTotal["PointWidth"] = "0.6";
