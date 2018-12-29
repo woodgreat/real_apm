@@ -9,9 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 /*
 ALL SOURCE CODES OF THIS PROJECT IS UNDER LGPL 3.0
-     */
+*/
 namespace WindowsForms_showAPM
 {
     public partial class FormMain : Form
@@ -111,6 +112,9 @@ namespace WindowsForms_showAPM
             t.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
             t.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
+            /////////////////
+            //apm chart
+            initialChart();
         }
 
 
@@ -316,9 +320,67 @@ namespace WindowsForms_showAPM
             this.WindowState = FormWindowState.Minimized;
         }
 
+
         private void FormMain_DoubleClick(object sender,EventArgs e)
         {
             MessageBox.Show("责任作者：mr_wood@126.com");
         }
+
+
+        private void initialChart()
+        {
+          chart1.Series.Clear();//清除默认的图例
+          
+
+          Series series2 = new Series("default2");
+          series2.Points.Add(160);
+          series2.Points.AddY(150);
+          series2.Points.AddY(140);
+          series2.Points.AddY(170);
+          series2.Points.AddY(120);
+
+          //series.ChartType = SeriesChartType.Column;
+          series2.ChartType = SeriesChartType.Area;
+
+          series2["PointWidth"] = "0.6";
+          series2.IsValueShownAsLabel = true;//是否显示值
+
+          series2.BorderColor = Color.FromArgb(80,26,255,255);
+          chart1.Series.Add(series2);
+
+
+          Series series = new Series("default");
+          series.Points.Add(60);
+          series.Points.AddY(50);
+          series.Points.AddY(40);
+          series.Points.AddY(70);
+          series.Points.AddY(20);
+
+          //series.ChartType = SeriesChartType.Column;
+          series.ChartType = SeriesChartType.Area;
+
+          series["PointWidth"] = "0.6";
+          series.IsValueShownAsLabel = true;//是否显示值
+
+          series.BorderColor = Color.FromArgb(200,255,0,0);
+
+          chart1.Series.Add(series);
+          //series["DrawingStyle"] = "cylinder";
+          chart1.Legends[0].Enabled = false;//是否显示图例
+                                            //chart1.BackColor = Color.FromArgb(243, 223, 193);
+          chart1.BackColor = ColorTranslator.FromHtml("#D3DFF0");//用网页颜色
+          chart1.BackGradientStyle = GradientStyle.TopBottom;//渐变背景，从上到下
+          chart1.BorderlineDashStyle = ChartDashStyle.Solid;//外框线为实线
+          chart1.BorderlineWidth = 2;
+
+          chart1.ChartAreas[0].BackColor = Color.Transparent;//数据区域的背景，默认为白色
+          chart1.ChartAreas[0].BackGradientStyle = GradientStyle.TopBottom;
+          chart1.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
+          chart1.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，纵向的线条颜色
+          chart1.ChartAreas[0].AxisX.MajorGrid.Interval = 3;//主网格间距
+          chart1.ChartAreas[0].AxisX.MinorGrid.Interval = 2;//副网格间距
+          chart1.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，横向线条的颜色
+        }
+
     }
 }
