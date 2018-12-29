@@ -49,7 +49,7 @@ namespace WindowsForms_showAPM
     private Series series1MinApmTotal = new Series("total");
     private Series series1MinApmMouseTotal = new Series("mouse");
       
-    private static int DATA_CHART_SHOWN_SECONDS =300;    //DEFINE SECONDS CHART DATA
+    private static int DATA_CHART_SHOWN_SECONDS =1200;    //DEFINE SECONDS CHART DATA
     
     public FormMain()
     {
@@ -395,13 +395,14 @@ namespace WindowsForms_showAPM
         apmChartKeyData[i+1] = apmChartKeyData[i];
         apmChartMouseData[i+1] = apmChartMouseData[i];
       }
-      apmChartData[0] = thisSecondsCounter;    //keep last apm valuse
-      apmChartKeyData[0] = thisSecondsKeyCounter;
-      apmChartMouseData[0] = thisSecondsMouseCounter;
 
-      //apmChartData[59] = totalAPM;    //keep last apm valuse
-      //apmChartKeyData[59] = totalKeyAPM;
-      //apmChartMouseData[59] = totalMouseAPM;
+      apmChartData[0] = totalAPM;    //keep last apm valuse
+      apmChartKeyData[0] = totalKeyAPM;
+      apmChartMouseData[0] = totalMouseAPM;
+
+      //apmChartData[0] = thisSecondsCounter;    //keep last apm valuse
+      //apmChartKeyData[0] = thisSecondsKeyCounter;
+      //apmChartMouseData[0] = thisSecondsMouseCounter;
 
       thisSecondsCounter = 0;         //reset total seconds counter
       thisSecondsMouseCounter = 0;    //reset mouse seconds counter
