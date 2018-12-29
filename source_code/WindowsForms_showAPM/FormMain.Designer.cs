@@ -37,8 +37,8 @@
       this.labelTipApm = new System.Windows.Forms.Label();
       this.labelTextApm = new System.Windows.Forms.Label();
       this.buttonExit = new System.Windows.Forms.Button();
-      this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-      ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+      this.chart1MinApm = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      ((System.ComponentModel.ISupportInitialize)(this.chart1MinApm)).BeginInit();
       this.SuspendLayout();
       // 
       // notifyIconTaskbar
@@ -53,7 +53,7 @@
       this.labelTipApm.AutoSize = true;
       this.labelTipApm.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTipApm.ForeColor = System.Drawing.Color.DarkMagenta;
-      this.labelTipApm.Location = new System.Drawing.Point(38, 22);
+      this.labelTipApm.Location = new System.Drawing.Point(38, 37);
       this.labelTipApm.Name = "labelTipApm";
       this.labelTipApm.Size = new System.Drawing.Size(174, 20);
       this.labelTipApm.TabIndex = 0;
@@ -64,7 +64,7 @@
       this.labelTextApm.AutoSize = true;
       this.labelTextApm.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTextApm.ForeColor = System.Drawing.Color.RoyalBlue;
-      this.labelTextApm.Location = new System.Drawing.Point(212, 14);
+      this.labelTextApm.Location = new System.Drawing.Point(212, 29);
       this.labelTextApm.Name = "labelTextApm";
       this.labelTextApm.Size = new System.Drawing.Size(32, 33);
       this.labelTextApm.TabIndex = 1;
@@ -81,28 +81,28 @@
       this.buttonExit.UseVisualStyleBackColor = true;
       this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
       // 
-      // chart1
+      // chart1MinApm
       // 
       chartArea1.Name = "ChartArea1";
-      this.chart1.ChartAreas.Add(chartArea1);
+      this.chart1MinApm.ChartAreas.Add(chartArea1);
       legend1.Name = "Legend1";
-      this.chart1.Legends.Add(legend1);
-      this.chart1.Location = new System.Drawing.Point(42, 76);
-      this.chart1.Name = "chart1";
+      this.chart1MinApm.Legends.Add(legend1);
+      this.chart1MinApm.Location = new System.Drawing.Point(42, 92);
+      this.chart1MinApm.Name = "chart1MinApm";
       series1.ChartArea = "ChartArea1";
       series1.Legend = "Legend1";
       series1.Name = "Series1";
-      this.chart1.Series.Add(series1);
-      this.chart1.Size = new System.Drawing.Size(281, 125);
-      this.chart1.TabIndex = 3;
-      this.chart1.Text = "chart1";
+      this.chart1MinApm.Series.Add(series1);
+      this.chart1MinApm.Size = new System.Drawing.Size(321, 125);
+      this.chart1MinApm.TabIndex = 3;
+      this.chart1MinApm.Text = "chart1";
       // 
       // FormMain
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(395, 293);
-      this.Controls.Add(this.chart1);
+      this.Controls.Add(this.chart1MinApm);
       this.Controls.Add(this.buttonExit);
       this.Controls.Add(this.labelTextApm);
       this.Controls.Add(this.labelTipApm);
@@ -115,7 +115,7 @@
       this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
       this.Load += new System.EventHandler(this.FormMain_Load);
       this.DoubleClick += new System.EventHandler(this.FormMain_DoubleClick);
-      ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.chart1MinApm)).EndInit();
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -127,7 +127,7 @@
         private System.Windows.Forms.Label labelTipApm;
         private System.Windows.Forms.Label labelTextApm;
         private System.Windows.Forms.Button buttonExit;
-    private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+    private System.Windows.Forms.DataVisualization.Charting.Chart chart1MinApm;
   }
 }
 

@@ -26,8 +26,11 @@ namespace WindowsForms_showAPM
         private int[] apmSeconds;
 
         SynchronizationContext m_SyncContext = null;
+        SynchronizationContext m_SyncChart = null;
 
         private static object actionLock = new object();
+
+        private Series series1MinApmTotal = new Series("default");
 
         public FormMain()
         {
@@ -71,12 +74,18 @@ namespace WindowsForms_showAPM
             //form
             //CheckForIllegalCrossThreadCalls = false;//disable report
             m_SyncContext = SynchronizationContext.Current;
+            m_SyncChart = SynchronizationContext.Current;
 
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
 
             this.ShowInTaskbar = false;
             this.Text = "Real APM   v" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+
+
+            /////////////////
+            //apm chart
+            initialChart();
 
 
             ///////////
@@ -86,12 +95,14 @@ namespace WindowsForms_showAPM
             //k_hook.KeyPressEvent += K_hook_KeyPressEvent;
             k_hook.Start();//安装键盘钩子
 
+
             //////////////
             //mouse hook
             m_hook = new MouseHook();
             m_hook.SetHook();
             //m_hook.MouseMoveEvent += mh_MouseMoveEvent;
             m_hook.MouseClickEvent += mh_MouseClickEvent;
+
 
             /////////////
             //seconds work array
@@ -101,20 +112,48 @@ namespace WindowsForms_showAPM
                 apmSeconds[i] = 0;
             }
 
+
             /////////////
             //reset seconds counter
             thisSecondsCounter = 0;
 
-            /////////////////
-            //install timer
-            System.Timers.Timer t = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为10000毫秒；
-            t.Elapsed += new System.Timers.ElapsedEventHandler(checkTheSecondAction);//到达时间的时候执行事件；
-            t.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
-            t.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
             /////////////////
-            //apm chart
-            initialChart();
+            //install timer
+            //  apm get timer
+            System.Timers.Timer tApm = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为10000毫秒；
+            tApm.Elapsed += new System.Timers.ElapsedEventHandler(checkTheSecondAction);//到达时间的时候执行事件；
+            tApm.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            tApm.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+
+            //  apm chart refresh timer
+            System.Timers.Timer tApmChartUpdate = new System.Timers.Timer(1000);//实例化Timer类，设置间隔时间为10000毫秒；
+            tApmChartUpdate.Elapsed += new System.Timers.ElapsedEventHandler(apmChartUpdate);//到达时间的时候执行事件；
+            tApmChartUpdate.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
+            tApmChartUpdate.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
+
+            
+        }
+
+
+        private void apmChartUpdate(object source,System.Timers.ElapsedEventArgs e)
+        {
+            m_SyncChart.Post(apmChartUpdateData,totalAPM);
+        }
+      
+
+        public void apmChartUpdateData(object totalAPM)
+        {// refresh the APM chart
+            //DRAW APM 1 MINITE CHART
+
+            chart1MinApm.Series.Clear();            //clear the chart
+            //series1MinApmTotal.Points.Clear();    //clear the data
+            series1MinApmTotal.Points.Add(this.totalAPM);
+
+            chart1MinApm.Series.Add(series1MinApmTotal);
+            //chart1MinApm.Invalidate();
+            //System.Console.WriteLine("update chart");
+
         }
 
 
@@ -186,7 +225,7 @@ namespace WindowsForms_showAPM
                     this.notifyIconTaskbar.Icon = cursor;
 
                     this.notifyIconTaskbar.Text = "Real APM : " + totalAPM;
-
+          
                     m_SyncContext.Post(safePost_setAPMText,totalAPM);
                     //this.labelTextApm.Text = totalAPM.ToString();
 
@@ -197,7 +236,13 @@ namespace WindowsForms_showAPM
                     cursorBitmap.Dispose();
                     cursor.Dispose();
                     myFont.Dispose();
-                    bush.Dispose();   
+                    bush.Dispose();
+
+                    
+
+               
+                    
+                    
                 }           
             } catch( Exception e )
             {
@@ -329,6 +374,37 @@ namespace WindowsForms_showAPM
 
         private void initialChart()
         {
+          chart1MinApm.Series.Clear();//清除默认的图例
+
+          series1MinApmTotal.ChartType = SeriesChartType.Area;
+
+          series1MinApmTotal["PointWidth"] = "0.6";
+          series1MinApmTotal.IsValueShownAsLabel = false;//是否显示值
+
+          series1MinApmTotal.BorderColor = Color.FromArgb(200,255,0,0);
+
+          chart1MinApm.Series.Add(series1MinApmTotal);
+          //series["DrawingStyle"] = "cylinder";
+          chart1MinApm.Legends[0].Enabled = false;//是否显示图例
+                                            //chart1.BackColor = Color.FromArgb(243, 223, 193);
+          chart1MinApm.BackColor = ColorTranslator.FromHtml("#D3DFF0");//用网页颜色
+          chart1MinApm.BackGradientStyle = GradientStyle.TopBottom;//渐变背景，从上到下
+          chart1MinApm.BorderlineDashStyle = ChartDashStyle.Solid;//外框线为实线
+          chart1MinApm.BorderlineWidth = 2;
+
+          chart1MinApm.ChartAreas[0].BackColor = Color.Transparent;//数据区域的背景，默认为白色
+          chart1MinApm.ChartAreas[0].BackGradientStyle = GradientStyle.TopBottom;
+          chart1MinApm.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
+          chart1MinApm.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，纵向的线条颜色
+          chart1MinApm.ChartAreas[0].AxisX.MajorGrid.Interval = 3;//主网格间距
+          chart1MinApm.ChartAreas[0].AxisX.MinorGrid.Interval = 2;//副网格间距
+          chart1MinApm.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，横向线条的颜色
+        }
+
+
+        /*
+        private void initialChartTest()
+        {
           chart1.Series.Clear();//清除默认的图例
           
 
@@ -381,6 +457,7 @@ namespace WindowsForms_showAPM
           chart1.ChartAreas[0].AxisX.MinorGrid.Interval = 2;//副网格间距
           chart1.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，横向线条的颜色
         }
+        */
 
     }
 }
