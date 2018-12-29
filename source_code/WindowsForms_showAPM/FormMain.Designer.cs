@@ -53,7 +53,7 @@
       this.labelTipApm.AutoSize = true;
       this.labelTipApm.Font = new System.Drawing.Font("宋体", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTipApm.ForeColor = System.Drawing.Color.DarkMagenta;
-      this.labelTipApm.Location = new System.Drawing.Point(38, 37);
+      this.labelTipApm.Location = new System.Drawing.Point(96, 47);
       this.labelTipApm.Name = "labelTipApm";
       this.labelTipApm.Size = new System.Drawing.Size(174, 20);
       this.labelTipApm.TabIndex = 0;
@@ -64,7 +64,7 @@
       this.labelTextApm.AutoSize = true;
       this.labelTextApm.Font = new System.Drawing.Font("宋体", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
       this.labelTextApm.ForeColor = System.Drawing.Color.RoyalBlue;
-      this.labelTextApm.Location = new System.Drawing.Point(212, 29);
+      this.labelTextApm.Location = new System.Drawing.Point(270, 39);
       this.labelTextApm.Name = "labelTextApm";
       this.labelTextApm.Size = new System.Drawing.Size(32, 33);
       this.labelTextApm.TabIndex = 1;
@@ -73,7 +73,7 @@
       // buttonExit
       // 
       this.buttonExit.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-      this.buttonExit.Location = new System.Drawing.Point(169, 258);
+      this.buttonExit.Location = new System.Drawing.Point(165, 249);
       this.buttonExit.Name = "buttonExit";
       this.buttonExit.Size = new System.Drawing.Size(75, 23);
       this.buttonExit.TabIndex = 2;
@@ -87,13 +87,13 @@
       this.chart1MinApm.ChartAreas.Add(chartArea1);
       legend1.Name = "Legend1";
       this.chart1MinApm.Legends.Add(legend1);
-      this.chart1MinApm.Location = new System.Drawing.Point(42, 92);
+      this.chart1MinApm.Location = new System.Drawing.Point(20, 105);
       this.chart1MinApm.Name = "chart1MinApm";
       series1.ChartArea = "ChartArea1";
       series1.Legend = "Legend1";
       series1.Name = "Series1";
       this.chart1MinApm.Series.Add(series1);
-      this.chart1MinApm.Size = new System.Drawing.Size(321, 125);
+      this.chart1MinApm.Size = new System.Drawing.Size(352, 126);
       this.chart1MinApm.TabIndex = 3;
       this.chart1MinApm.Text = "chart1";
       // 

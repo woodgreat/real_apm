@@ -24,6 +24,7 @@ namespace WindowsForms_showAPM
         private KeyboardHook k_hook;
         private MouseHook m_hook;
         private int[] apmSeconds;
+        private int[] apmChartData;
 
         SynchronizationContext m_SyncContext = null;
         SynchronizationContext m_SyncChart = null;
@@ -86,6 +87,11 @@ namespace WindowsForms_showAPM
             /////////////////
             //apm chart
             initialChart();
+            apmChartData = new int[60];
+            for ( int i = 0; i < 60; i++ )
+            {
+                apmChartData[i] = 0;
+            }
 
 
             ///////////
@@ -147,8 +153,12 @@ namespace WindowsForms_showAPM
             //DRAW APM 1 MINITE CHART
 
             chart1MinApm.Series.Clear();            //clear the chart
-            //series1MinApmTotal.Points.Clear();    //clear the data
-            series1MinApmTotal.Points.Add(this.totalAPM);
+            series1MinApmTotal.Points.Clear();    //clear the data
+            
+            for ( int i = 0; i < 60; i++ )
+            {
+                series1MinApmTotal.Points.Add(apmChartData[i]);
+            }
 
             chart1MinApm.Series.Add(series1MinApmTotal);
             //chart1MinApm.Invalidate();
@@ -238,11 +248,6 @@ namespace WindowsForms_showAPM
                     myFont.Dispose();
                     bush.Dispose();
 
-                    
-
-               
-                    
-                    
                 }           
             } catch( Exception e )
             {
@@ -334,6 +339,15 @@ namespace WindowsForms_showAPM
             }
 
             thisSecondsCounter = 0;     //reset seconds counter
+
+
+            //chart data
+            for ( int i = 1; i < 60; i++ )
+            {//move data one slot
+                apmChartData[i-1] = apmChartData[i];
+            }
+            apmChartData[59]  =totalAPM;    //keep last apm valuse
+
         }
 
 
@@ -397,8 +411,9 @@ namespace WindowsForms_showAPM
           chart1MinApm.ChartAreas[0].BorderDashStyle = ChartDashStyle.Solid;
           chart1MinApm.ChartAreas[0].AxisX.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，纵向的线条颜色
           chart1MinApm.ChartAreas[0].AxisX.MajorGrid.Interval = 3;//主网格间距
-          chart1MinApm.ChartAreas[0].AxisX.MinorGrid.Interval = 2;//副网格间距
           chart1MinApm.ChartAreas[0].AxisY.MajorGrid.LineColor = Color.FromArgb(24,64,64,64);//数据区域，横向线条的颜色
+          chart1MinApm.ChartAreas[0].AxisX.MinorGrid.Interval = 2;//副网格间距
+          
         }
 
 
