@@ -197,7 +197,7 @@ namespace WindowsForms_showAPM
                 }           
             } catch( Exception e )
             {
-                System.Console.WriteLine("e :" + e.ToString());     //del
+                //System.Console.WriteLine("e :" + e.ToString());     //del
                 //no-nothing
             }
             
