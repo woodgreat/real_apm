@@ -3,6 +3,7 @@ show you real action of per minute
 
 <br/>
 
+![avatar](https://github.com/woodgreat/real_apm/blob/master/pic/realapm.png)
 ![avatar][realapm_png]
 
 
